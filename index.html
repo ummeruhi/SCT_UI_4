@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitness App User Journey Prototype</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #e6e9ee;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding: 24px;
+    }
+
+    .phone {
+      width: 375px;
+      height: 780px;
+      background: #fff;
+      border: 10px solid #222;
+      border-radius: 34px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+    }
+
+    .notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 24px;
+      background: #222;
+      border-radius: 0 0 18px 18px;
+      z-index: 100;
+    }
+
+    .app {
+      width: 100%;
+      height: 100%;
+      background: #f7f8fa;
+      padding: 38px 20px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      margin-bottom: 14px;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #d8dbe0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 8%;
+      background: #111;
+      transition: width 0.3s ease;
+    }
+
+    .screen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      animation: fade 0.28s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .centered {
+      justify-content: center;
+    }
+
+    .top-right {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+
+    .skip-btn {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .logo-box {
+      width: 120px;
+      height: 120px;
+      border: 3px dashed #777;
+      border-radius: 24px;
+      background: #fff;
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #111;
+      margin-bottom: 12px;
+    }
+
+    p {
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .btn, .btn-outline {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 10px;
+      transition: 0.2s ease;
+    }
+
+    .btn {
+      background: #111;
+      color: #fff;
+    }
+
+    .btn:hover {
+      background: #000;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #111;
+      color: #111;
+    }
+
+    .btn-outline:hover {
+      background: #111;
+      color: #fff;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #222;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #bbb;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .option-card {
+      background: #fff;
+      border: 2px solid #bbb;
+      border-radius: 16px;
+      padding: 18px 10px;
+      text-align: center;
+      cursor: pointer;
+      color: #222;
+      font-size: 14px;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .option-card:hover {
+      border-color: #111;
+    }
+
+    .option-card.selected {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    .summary-box {
+      background: #fff;
+      border: 2px dashed #999;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .summary-box p {
+      margin-bottom: 8px;
+      text-align: left;
+      color: #333;
+    }
+
+    .mini-note {
+      font-size: 12px;
+      color: #6a6a6a;
+      text-align: left;
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+
+    .annotation-panel {
+      width: 355px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      padding: 22px;
+    }
+
+    .annotation-panel h3 {
+      margin-bottom: 12px;
+      color: #111;
+      font-size: 21px;
+    }
+
+    .annotation-panel ul {
+      padding-left: 18px;
+      color: #444;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #111;
+      color: #fff;
+      border-radius: 30px;
+      padding: 6px 10px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .success-badge {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      border: 3px dashed #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
+      color: #111;
+      background: #fff;
+    }
+
+    @media (max-width: 850px) {
+      .annotation-panel {
+        width: 100%;
+        max-width: 375px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="notch"></div>
+
+    <div class="app">
+      <div class="topbar">
+        <div class="progress-text" id="progressText">Step 1 of 10</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- 1 Splash -->
+      <div class="screen active centered" id="screen1">
+        <div class="logo-box">Splash<br>Screen</div>
+        <h1>FitJourney</h1>
+        <p>Build healthy habits with a guided mobile fitness experience.</p>
+        <button class="btn" onclick="showScreen(2)">Enter App</button>
+      </div>
+
+      <!-- 2 Welcome -->
+      <div class="screen centered" id="screen2">
+        <div class="logo-box">Welcome</div>
+        <h2>Welcome to FitJourney</h2>
+        <p>Your fitness companion for workouts, goals, reminders, and daily progress tracking.</p>
+        <button class="btn" onclick="showScreen(3)">Get Started</button>
+      </div>
+
+      <!-- 3 Onboarding 1 -->
+      <div class="screen centered" id="screen3">
+        <div class="top-right">
+          <button class="skip-btn" onclick="showScreen(5)">Skip</button>
+        </div>
+        <div class="logo-box">Onboarding 1</div>
+        <h2>Track Daily Activity</h2>
+        <p>Monitor steps, workouts, calories, and streaks in one clean mobile dashboard.</p>
+        <div class="footer-nav">
+          <button class="btn-outline" onclick="showScreen(2)">Back</button>
+          <button class="btn" onclick="showScreen(4)">Next</button>
+        </div>
+      </div>
+
+      <!-- 4 Onboarding 2 -->
+      <div class="screen centered" id="screen4">
+        <div class="top-right">
+          <button class="skip-btn" onclick="showScreen(5)">Skip</button>
+        </div>
+        <div class="logo-box">Onboarding 2</div>
+        <h2>Personalized Plans</h2>
+        <p>Set your level, choose your goals, and get a plan tailored to your needs.</p>
+        <div class="footer-nav">
+          <button class="btn-outline" onclick="showScreen(3)">Back</button>
+          <button class="btn" onclick="showScreen(5)">Next</button>
+        </div>
+      </div>
+
+      <!-- 5 Account -->
+      <div class="screen centered" id="screen5">
+        <div class="logo-box">Account</div>
+        <h2>Create or Access Account</h2>
+        <p>Continue with a new account or log in if you already use the app.</p>
+        <button class="btn" onclick="showScreen(6)">Sign Up</button>
+        <button class="btn-outline" onclick="showScreen(6)">Login</button>
+      </div>
+
+      <!-- 6 Profile -->
+      <div class="screen" id="screen6">
+        <h2>Profile Setup</h2>
+        <p>Enter basic details to personalize the experience.</p>
+
+        <div class="input-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Enter your full name">
+        </div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="Age">
+          </div>
+          <div class="input-group">
+            <label for="gender">Gender</label>
+            <select id="gender">
+              <option value="">Select</option>
+              <option>Female</option>
+              <option>Male</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="input-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" placeholder="e.g. 165">
+          </div>
+          <div class="input-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" placeholder="e.g. 58">
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <button class="btn-outline" onclick="showScreen(5)">Back</button>
+          <button class="btn" onclick="validateProfile()">Continue</button>
+        </div>
+      </div>
+
+      <!-- 7 Fitness Level -->
+      <div class="screen" id="screen7">
+        <h2>Select Fitness Level</h2>
+        <p>This helps the app recommend a suitable starting plan.</p>
+
+        <div class="option-grid" id="levelOptions">
+          <div class="option-card level-card" onclick="selectSingle(this, 'level-card')">Beginner</div>
+          <div class="option-card level-card" onclick="selectSingle(this, 'level-card')">Intermediate</div>
+          <div class="option-card level-card" onclick="selectSingle(this, 'level-card')">Advanced</div>
+          <div class="option-card level-card" onclick="selectSingle(this, 'level-card')">Athlete</div>
+        </div>
+
+        <p class="mini-note">Only one level can be selected.</p>
+
+        <div class="footer-nav">
+          <button class="btn-outline" onclick="showScreen(6)">Back</button>
+          <button class="btn" onclick="validateLevel()">Continue</button>
+        </div>
+      </div>
+
+      <!-- 8 Goals -->
+      <div class="screen" id="screen8">
+        <h2>Select Fitness Goals</h2>
+        <p>Choose one or more goals to personalize the journey.</p>
+
+        <div class="option-grid" id="goalOptions">
+          <div class="option-card goal-card" onclick="toggleMulti(this)">Lose Weight</div>
+          <div class="option-card goal-card" onclick="toggleMulti(this)">Build Muscle</div>
+          <div class="option-card goal-card" onclick="toggleMulti(this)">Stay Active</div>
+          <div class="option-card goal-card" onclick="toggleMulti(this)">Improve Stamina</div>
+        </div>
+
+        <div class="footer-nav">
+          <button class="btn-outline" onclick="showScreen(7)">Back</button>
+          <button class="btn" onclick="validateGoals()">Continue</button>
+        </div>
+      </div>
+
+      <!-- 9 Workout Preference -->
+      <div class="screen" id="screen9">
+        <h2>Workout Preferences</h2>
+        <p>Select your preferred workout styles.</p>
+
+        <div class="option-grid" id="workoutOptions">
+          <div class="option-card workout-card" onclick="toggleMulti(this)">Home Workouts</div>
+          <div class="option-card workout-card" onclick="toggleMulti(this)">Gym Training</div>
+          <div class="option-card workout-card" onclick="toggleMulti(this)">Yoga</div>
+          <div class="option-card workout-card" onclick="toggleMulti(this)">Cardio</div>
+        </div>
+
+        <div class="footer-nav">
+          <button class="btn-outline" onclick="showScreen(8)">Back</button>
+          <button class="btn" onclick="showScreen(10)">Continue</button>
+        </div>
+      </div>
+
+      <!-- 10 Notification Permission -->
+      <div class="screen centered" id="screen10">
+        <div class="logo-box">Notifications</div>
+        <h2>Enable Reminders?</h2>
+        <p>Get workout reminders, hydration alerts, and goal progress notifications.</p>
+        <button class="btn" onclick="setNotifications('Enabled')">Allow Notifications</button>
+        <button class="btn-outline" onclick="setNotifications('Skipped')">Maybe Later</button>
+      </div>
+
+      <!-- 11 Summary -->
+      <div class="screen centered" id="screen11">
+        <div class="success-badge">✓</div>
+        <h2>Setup Complete</h2>
+        <div class="summary-box">
+          <p><strong>Name:</strong> <span id="summaryName">-</span></p>
+          <p><strong>Age:</strong> <span id="summaryAge">-</span></p>
+          <p><strong>Gender:</strong> <span id="summaryGender">-</span></p>
+          <p><strong>Height:</strong> <span id="summaryHeight">-</span></p>
+          <p><strong>Weight:</strong> <span id="summaryWeight">-</span></p>
+          <p><strong>Fitness Level:</strong> <span id="summaryLevel">-</span></p>
+          <p><strong>Goals:</strong> <span id="summaryGoals">-</span></p>
+          <p><strong>Workouts:</strong> <span id="summaryWorkouts">-</span></p>
+          <p><strong>Notifications:</strong> <span id="summaryNotifications">-</span></p>
+        </div>
+        <p>Your initial user journey is complete and the app is ready to personalize the next experience.</p>
+        <button class="btn" onclick="restartPrototype()">Restart Prototype</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation-panel">
+    <div class="tag">Annotated UX Decisions</div>
+    <h3>Why this upgraded flow is better</h3>
+    <ul>
+      <li>Added a splash screen to simulate a real mobile app entry point.</li>
+      <li>Short onboarding with skip option reduces friction for returning users.</li>
+      <li>Profile setup collects only essential data first, keeping the flow smooth.</li>
+      <li>Fitness level is separated from goals so recommendations can be more precise.</li>
+      <li>Goal selection uses multi-select because users often have more than one objective.</li>
+      <li>Workout preference step improves personalization for home, gym, yoga, or cardio users.</li>
+      <li>Notification permission is placed near the end, after value is already established.</li>
+      <li>Summary screen confirms all choices and gives closure to the onboarding journey.</li>
+      <li>Progress bar reduces uncertainty and helps users understand how much is left.</li>
+      <li>This prototype remains low-fidelity but is still clickable and realistic for submission.</li>
+    </ul>
+  </div>
+
+  <script>
+    const totalSteps = 11;
+    let notificationsChoice = "Skipped";
+
+    function showScreen(step) {
+      const screens = document.querySelectorAll(".screen");
+      screens.forEach(screen => screen.classList.remove("active"));
+
+      document.getElementById("screen" + step).classList.add("active");
+
+      const percent = (step / totalSteps) * 100;
+      document.getElementById("progressFill").style.width = percent + "%";
+      document.getElementById("progressText").innerText = "Step " + step + " of " + totalSteps;
+    }
+
+    function validateProfile() {
+      const name = document.getElementById("name").value.trim();
+      const age = document.getElementById("age").value.trim();
+      const gender = document.getElementById("gender").value;
+      const height = document.getElementById("height").value.trim();
+      const weight = document.getElementById("weight").value.trim();
+
+      if (!name || !age || !gender || !height || !weight) {
+        alert("Please fill in all profile details.");
+        return;
+      }
+
+      showScreen(7);
+    }
+
+    function selectSingle(clickedCard, className) {
+      const cards = document.querySelectorAll("." + className);
+      cards.forEach(card => card.classList.remove("selected"));
+      clickedCard.classList.add("selected");
+    }
+
+    function toggleMulti(card) {
+      card.classList.toggle("selected");
+    }
+
+    function validateLevel() {
+      const selectedLevel = document.querySelector(".level-card.selected");
+      if (!selectedLevel) {
+        alert("Please select one fitness level.");
+        return;
+      }
+      showScreen(8);
+    }
+
+    function validateGoals() {
+      const selectedGoals = document.querySelectorAll(".goal-card.selected");
+      if (selectedGoals.length === 0) {
+        alert("Please select at least one fitness goal.");
+        return;
+      }
+      showScreen(9);
+    }
+
+    function setNotifications(choice) {
+      notificationsChoice = choice;
+      fillSummary();
+      showScreen(11);
+    }
+
+    function fillSummary() {
+      const name = document.getElementById("name").value || "-";
+      const age = document.getElementById("age").value || "-";
+      const gender = document.getElementById("gender").value || "-";
+      const height = document.getElementById("height").value || "-";
+      const weight = document.getElementById("weight").value || "-";
+
+      const levelCard = document.querySelector(".level-card.selected");
+      const selectedGoals = Array.from(document.querySelectorAll(".goal-card.selected")).map(el => el.innerText);
+      const selectedWorkouts = Array.from(document.querySelectorAll(".workout-card.selected")).map(el => el.innerText);
+
+      document.getElementById("summaryName").innerText = name;
+      document.getElementById("summaryAge").innerText = age;
+      document.getElementById("summaryGender").innerText = gender;
+      document.getElementById("summaryHeight").innerText = height + " cm";
+      document.getElementById("summaryWeight").innerText = weight + " kg";
+      document.getElementById("summaryLevel").innerText = levelCard ? levelCard.innerText : "-";
+      document.getElementById("summaryGoals").innerText = selectedGoals.length ? selectedGoals.join(", ") : "-";
+      document.getElementById("summaryWorkouts").innerText = selectedWorkouts.length ? selectedWorkouts.join(", ") : "Not selected";
+      document.getElementById("summaryNotifications").innerText = notificationsChoice;
+    }
+
+    function restartPrototype() {
+      document.getElementById("name").value = "";
+      document.getElementById("age").value = "";
+      document.getElementById("gender").value = "";
+      document.getElementById("height").value = "";
+      document.getElementById("weight").value = "";
+
+      document.querySelectorAll(".option-card").forEach(card => {
+        card.classList.remove("selected");
+      });
+
+      notificationsChoice = "Skipped";
+      showScreen(1);
+    }
+
+    showScreen(1);
+  </script>
+</body>
+</html>
