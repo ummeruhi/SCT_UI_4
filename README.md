@@ -9,7 +9,11 @@ The prototype simulates how a new user interacts with the application during the
 
 ---
 
-# Live Demo : https://ummeruhi.github.io/SCT_UI_4/
+# Live Demo : 
+https://ummeruhi.github.io/SCT_UI_4/
+
+---
+
 # 📱 Platform
 Mobile Application
 
